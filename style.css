@@ -1,0 +1,68 @@
+/* TEMPORARY TEST STYLE - REMOVE LATER */
+body {
+    background-color: #FFDDC1 !important; /* A very light orange/peach color */
+    border: 5px solid red !important; /* A thick red border */
+}
+/* END TEMPORARY TEST STYLE */
+
+/* Your existing CSS code will start below this, like: */
+/* General body styles - these affect the entire page */
+body {
+    font-family: Arial, sans-serif; /* Sets a clean, common font */
+    margin: 20px; /* Adds space around the entire page content */
+    background-color: #f4f4f4; /* A light grey background for the page */
+    color: #333; /* Default text color for the page */
+    line-height: 1.6; /* Spacing between lines of text for readability */
+}
+
+/* Styles for the main heading (h1) */
+h1 {
+    color: #0056b3; /* A nice blue color for main titles */
+    text-align: center; /* Centers the main heading */
+    margin-bottom: 20px; /* Space below the main heading */
+    border-bottom: 2px solid #ccc; /* A thin grey line under the heading */
+    padding-bottom: 10px; /* Space between text and the line */
+}
+
+/* Styles for sub-headings (h2) */
+h2 {
+    color: #007bff; /* A slightly lighter blue for section titles */
+    margin-top: 30px; /* Space above each section heading */
+    margin-bottom: 15px; /* Space below each section heading */
+    border-bottom: 1px solid #eee; /* A very light line under sub-headings */
+    padding-bottom: 5px;
+}
+
+/* Styles for paragraphs */
+p {
+    margin-bottom: 10px; /* Space below each paragraph */
+}
+
+/* Styles for unordered lists (bullet points) */
+ul {
+    list-style-type: disc; /* Ensures standard bullet points */
+    margin-left: 25px; /* Indents the list from the left */
+    margin-bottom: 15px; /* Space below the list */
+}
+
+/* Styles for list items */
+li {
+    margin-bottom: 5px; /* Space between individual list items */
+}
+
+/* Styles for strong/bold text (like "Soft Skills:" or "Burmese:") */
+strong {
+    color: #1a1a1a; /* Makes bold text a bit darker */
+}
+
+/* You can add more styles here! For example: */
+/*
+.container {
+    max-width: 960px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+*/

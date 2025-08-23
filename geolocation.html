@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geolocation Assignment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background-color: white;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            margin-top: 1em;
+        }
+        #result {
+            margin-top: 1.5em;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Geolocation Assignment</h1>
+        <button onclick="getDistance()">Where am I?</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Coordinates for Kasem Bundit University (Pattanakarn campus)
+        const kasemBundit = {
+            latitude: 13.7381,
+            longitude: 100.6558
+        };
+
+        // Haversine formula to calculate the distance between two lat/lon points
+        function haversineDistance(coords1, coords2) {
+            const R = 6371; // Radius of the Earth in kilometers
+
+            const lat1 = toRad(coords1.latitude);
+            const lon1 = toRad(coords1.longitude);
+            const lat2 = toRad(coords2.latitude);
+            const lon2 = toRad(coords2.longitude);
+
+            const deltaLat = lat2 - lat1;
+            const deltaLon = lon2 - lon1;
+
+            const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+                      Math.cos(lat1) * Math.cos(lat2) *
+                      Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            const distance = R * c; // Distance in kilometers
+            return distance;
+        }
+
+        function toRad(degrees) {
+            return degrees * Math.PI / 180;
+        }
+
+        function getDistance() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = "Finding your location...";
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        };
+
+                        const distance = haversineDistance(userLocation, kasemBundit);
+                        const formattedDistance = distance.toFixed(2); // Round to 2 decimal places
+
+                        resultDiv.innerHTML = `You're ${formattedDistance} km away from the Kasem Bundit University.`;
+                    },
+                    (error) => {
+                        // Handle potential errors
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                resultDiv.innerHTML = "Permission to access location was denied. Please enable it in your browser settings.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                resultDiv.innerHTML = "Location information is unavailable.";
+                                break;
+                            case error.TIMEOUT:
+                                resultDiv.innerHTML = "The request to get user location timed out.";
+                                break;
+                            default:
+                                resultDiv.innerHTML = "An unknown error occurred.";
+                                break;
+                        }
+                    }
+                );
+            } else {
+                resultDiv.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+    </script>
+
+</body>
+</html>

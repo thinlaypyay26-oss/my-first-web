@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md mx-4">
+        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Change Calculator</h1>
+        <p class="text-center text-gray-600 mb-8">Enter the total cost and the amount paid to calculate the change.</p>
+
+        <!-- Input Section -->
+        <div class="space-y-6">
+            <div>
+                <label for="total-amount" class="block text-gray-700 font-medium mb-2">Total Amount Due</label>
+                <input type="number" id="total-amount" placeholder="e.g., 15.75" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+            </div>
+            <div>
+                <label for="paid-amount" class="block text-gray-700 font-medium mb-2">Amount Paid</label>
+                <input type="number" id="paid-amount" placeholder="e.g., 20.00" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+            </div>
+            <button id="calculate-btn" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105">
+                Calculate Change
+            </button>
+        </div>
+
+        <!-- Result Section -->
+        <div id="result" class="mt-8 hidden">
+            <div class="bg-blue-100 p-6 rounded-lg border-l-4 border-blue-500">
+                <h2 class="text-xl font-bold text-blue-800 mb-4">Results</h2>
+                <div id="total-change" class="text-blue-700 text-lg font-semibold mb-4"></div>
+                <div id="breakdown" class="space-y-2 text-gray-700"></div>
+            </div>
+        </div>
+
+        <!-- Error Message Box -->
+        <div id="error-message" class="mt-8 p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg hidden"></div>
+    </div>
+
+    <script>
+        // Get references to all the necessary HTML elements
+        const totalAmountInput = document.getElementById('total-amount');
+        const paidAmountInput = document.getElementById('paid-amount');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const resultDiv = document.getElementById('result');
+        const totalChangeDiv = document.getElementById('total-change');
+        const breakdownDiv = document.getElementById('breakdown');
+        const errorMessageDiv = document.getElementById('error-message');
+
+        /**
+         * Clears all previous results and error messages from the UI.
+         */
+        function clearResults() {
+            resultDiv.classList.add('hidden');
+            errorMessageDiv.classList.add('hidden');
+            totalChangeDiv.textContent = '';
+            breakdownDiv.innerHTML = '';
+            errorMessageDiv.textContent = '';
+        }
+
+        /**
+         * Displays an error message to the user.
+         * @param {string} message The error message to display.
+         */
+        function displayError(message) {
+            clearResults();
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.classList.remove('hidden');
+        }
+
+        /**
+         * Calculates the change and breaks it down into different denominations.
+         */
+        function calculateChange() {
+            clearResults();
+
+            // Get the values from the input fields and convert them to numbers
+            const totalAmount = parseFloat(totalAmountInput.value);
+            const paidAmount = parseFloat(paidAmountInput.value);
+
+            // Basic input validation
+            if (isNaN(totalAmount) || isNaN(paidAmount)) {
+                displayError('Please enter valid numbers for both fields.');
+                return;
+            }
+
+            if (paidAmount < totalAmount) {
+                displayError('Amount paid must be greater than or equal to the total amount.');
+                return;
+            }
+
+            // Calculate the total change, and convert it to cents to avoid floating-point errors
+            let changeInCents = Math.round((paidAmount - totalAmount) * 100);
+
+            // Create an object to store the breakdown of denominations
+            const denominations = {
+                'Dollars': 100,
+                'Quarters': 25,
+                'Dimes': 10,
+                'Nickels': 5,
+                'Pennies': 1
+            };
+            
+            let breakdown = {};
+
+            // Loop through the denominations to calculate the number of each
+            for (const denomination in denominations) {
+                const valueInCents = denominations[denomination];
+                if (changeInCents >= valueInCents) {
+                    const count = Math.floor(changeInCents / valueInCents);
+                    breakdown[denomination] = count;
+                    changeInCents %= valueInCents;
+                }
+            }
+            
+            // Display the total change and the breakdown
+            const totalChange = (paidAmount - totalAmount).toFixed(2);
+            totalChangeDiv.textContent = `Total Change: $${totalChange}`;
+            
+            let breakdownHTML = '';
+            for (const item in breakdown) {
+                breakdownHTML += `<p>${item}: ${breakdown[item]}</p>`;
+            }
+            if (breakdownHTML === '') {
+                breakdownHTML = '<p>No change due. The amounts are equal.</p>';
+            }
+            
+            breakdownDiv.innerHTML = breakdownHTML;
+            resultDiv.classList.remove('hidden');
+        }
+
+        // Add a click event listener to the button
+        calculateBtn.addEventListener('click', calculateChange);
+    </script>
+</body>
+</html>

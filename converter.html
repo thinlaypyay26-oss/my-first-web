@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Measurement Converter</title>
+    <style>
+        /* Optional: Add some basic styling here for better appearance */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .converter-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input[type="number"] {
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 150px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="converter-box">
+        <h2>Measurement Converter</h2>
+        <label for="inchesInput">Enter Inch:</label>
+        <input type="number" id="inchesInput" value="3"> <button onclick="convertInchesToCm()">Submit</button>
+        <p id="result">Equal to 7.62 cm</p> </div>
+
+    <script>
+        // JavaScript goes here
+        function convertInchesToCm() {
+            // 1. Get the value from the input field
+            const inches = parseFloat(document.getElementById("inchesInput").value);
+
+            // 2. Perform the conversion (1 inch = 2.54 cm)
+            if (!isNaN(inches)) { // Check if the input is a valid number
+                const centimeters = inches * 2.54;
+
+                // 3. Display the result
+                document.getElementById("result").innerHTML = `Equal to ${centimeters.toFixed(2)} cm`;
+            } else {
+                document.getElementById("result").innerHTML = "Please enter a valid number for inches.";
+            }
+        }
+
+        // Call the function once when the page loads to display the initial result if the input has a default value
+        window.onload = convertInchesToCm;
+    </script>
+</body>
+</html>
