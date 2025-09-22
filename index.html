@@ -3,302 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Pairing App</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>My Assignments</title>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f3e9;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
         }
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            width: 3rem;
-            height: 3rem;
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        h1, h2 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body>
 
-    <!-- Splash Screen -->
-    <div id="splash-screen" class="fixed inset-0 flex flex-col items-center justify-center bg-pink-300 text-white z-50 transition-opacity duration-1000">
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-white text-center mb-4">Food Pairings</h1>
-        <div class="p-6 bg-pink-400/50 rounded-2xl shadow-lg text-center">
-            <h2 class="text-xl sm:text-2xl font-bold mb-1">Thin Lay Pyay</h2>
-            <p class="text-lg sm:text-xl opacity-90">Student ID: 230702403116</p>
-        </div>
+    <div class="container">
+        <h1>My Web Development Assignments</h1>
+        <p>This is an index page for all my completed web assignments.</p>
+
+        <h2>List of Assignments</h2>
+        <ul>
+            <li><a href="Change.html">Change Calculator Assignment</a></li>
+            <li><a href="converter.html">Measurement Converter</a></li>
+            <li><a href="geolocation.html">Geolocation Assignment</a></li>
+            <li><a href="grade_assignment.html">Grade Assignment</a></li>
+            <li><a href="hobby.html">My Hobbies Page</a></li>
+            <li><a href="resume.html">My Resume</a></li>
+        </ul>
     </div>
-
-    <!-- Main Content -->
-    <div id="main-content" class="hidden w-full max-w-2xl bg-white rounded-2xl shadow-xl p-6 md:p-8">
-        <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-6">Explore Pairings</h1>
-        
-        <!-- Category list view -->
-        <div id="category-view">
-            <div id="category-list" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <!-- Category cards will be generated here -->
-            </div>
-            <p id="food-phrase" class="text-center text-gray-600 mt-6 italic text-sm"></p>
-        </div>
-
-        <!-- Pairings List view (initially hidden) -->
-        <div id="pairings-view" class="mt-8 hidden">
-            <button id="back-button" class="flex items-center text-gray-600 mb-4 font-semibold">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                </svg>
-                Back to Categories
-            </button>
-            <h2 id="current-category" class="text-2xl font-bold text-gray-800 mb-4"></h2>
-            <ul id="pairings-list" class="space-y-4">
-                <!-- Pairings items will be generated here -->
-            </ul>
-        </div>
-    </div>
-
-    <!-- JavaScript logic -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-            const foodData = {
-                "Cheeses 🧀": [
-                    { name: "Cheddar", pairings: ["Apples", "Pears", "Stout Beer", "Crackers", "Cider", "Walnuts", "Grapes", "Ham"] },
-                    { name: "Mozzarella", pairings: ["Tomatoes", "Basil", "White Wine", "Prosciutto", "Balsamic Glaze", "Olives", "Pesto", "Arugula"] },
-                    { name: "Brie", pairings: ["Berries", "Honey", "Champagne", "Almonds", "Crusty Bread", "Fig Jam", "Prosciutto", "Sparkling Wine"] },
-                    { name: "Feta", pairings: ["Watermelon", "Mint", "Olives", "Cucumber", "Lemon", "Tomatoes", "Red Onions", "Hummus"] },
-                    { name: "Gouda", pairings: ["Apples", "Pears", "Red Wine", "Crackers", "Walnuts", "Cherries", "Mustard", "Caramelized Onions"] },
-                    { name: "Swiss", pairings: ["Rye Bread", "Mustard", "Salami", "Pickles", "Hard Cider", "Chicken", "Green Apples", "Caraway"] },
-                    { name: "Goat Cheese", pairings: ["Figs", "Honey", "Beets", "Walnuts", "Pistachios", "Lemon", "Thyme", "Black Pepper"] },
-                    { name: "Parmesan", pairings: ["Pesto", "Prosciutto", "Balsamic", "Garlic", "Asparagus", "Artichoke", "Red Wine", "Crushed Red Pepper"] }
-                ],
-                "Fruits 🍎": [
-                    { name: "Apples", pairings: ["Cheddar", "Pork", "Cinnamon", "Caramel", "Walnuts", "Oatmeal", "Nutmeg"] },
-                    { name: "Berries", pairings: ["Brie", "Yogurt", "Dark Chocolate", "Pancakes", "Whipped Cream", "Lemon", "Mint", "Champagne"] },
-                    { name: "Pears", pairings: ["Blue Cheese", "Walnuts", "Prosciutto", "Red Wine", "Honey", "Arugula", "Pecans", "Cinnamon"] },
-                    { name: "Bananas", pairings: ["Peanut Butter", "Chocolate", "Oatmeal", "Yogurt", "Honey", "Cinnamon", "Walnuts", "Nutella"] },
-                    { name: "Avocado", pairings: ["Salt", "Lime", "Cilantro", "Tomatoes", "Tuna", "Salsa", "Black Beans", "Feta"] },
-                    { name: "Mango", pairings: ["Chili Powder", "Lime", "Coconut Milk", "Cilantro", "Jalapenos", "Shrimp", "Chicken", "Pork"] },
-                    { name: "Lemons", pairings: ["Fish", "Chicken", "Tea", "Berries", "Mint", "Parsley", "Garlic", "Butter"] },
-                    { name: "Oranges", pairings: ["Dark Chocolate", "Cranberries", "Cinnamon", "Ginger", "Clove", "Duck", "Honey", "Carrots"] }
-                ],
-                "Meats 🥩": [
-                    { name: "Chicken", pairings: ["Garlic", "Lemon", "Rosemary", "Thyme", "Onions", "Potatoes", "Mushrooms", "Broccoli"] },
-                    { name: "Beef", pairings: ["Potatoes", "Red Wine", "Mushrooms", "Carrots", "Onions", "Garlic", "Rosemary", "Asparagus"] },
-                    { name: "Pork", pairings: ["Apples", "Mustard", "Sage", "Rosemary", "Potatoes", "Fennel", "Garlic", "Cider"] },
-                    { name: "Lamb", pairings: ["Mint", "Garlic", "Rosemary", "Potatoes", "Feta", "Red Wine", "Cumin", "Cilantro"] },
-                    { name: "Fish", pairings: ["Lemon", "Dill", "Parsley", "Garlic", "Butter", "Asparagus", "White Wine", "Tomatoes"] },
-                    { name: "Sausage", pairings: ["Onions", "Peppers", "Pasta", "Tomato Sauce", "Garlic", "Cabbage", "Potatoes", "Red Wine"] },
-                    { name: "Prosciutto", pairings: ["Melon", "Brie", "Figs", "Arugula", "Mozzarella", "Balsamic Glaze", "Red Wine", "Olives"] },
-                    { name: "Bacon", pairings: ["Eggs", "Pancakes", "Syrup", "Maple", "Avocado", "Tomatoes", "Lettuce", "Bread"] }
-                ],
-                "Wines 🍷": [
-                    { name: "Red Wine", pairings: ["Beef", "Mushrooms", "Lamb", "Pork", "Aged Cheese", "Dark Chocolate", "Venison", "Duck"] },
-                    { name: "White Wine", pairings: ["Chicken", "Fish", "Mozzarella", "Pasta", "Green Vegetables", "Seafood", "Goat Cheese", "Pork"] },
-                    { name: "Champagne", pairings: ["Brie", "Strawberries", "Smoked Salmon", "Oysters", "Fried Foods", "Almonds", "Cheesecake", "Pears"] },
-                    { name: "Rosé", pairings: ["Grilled Chicken", "Salads", "Goat Cheese", "Berries", "Spicy Foods", "Shrimp", "Couscous", "Sushi"] },
-                    { name: "Pinot Grigio", pairings: ["Seafood", "Pasta Salad", "Chicken", "Light Cheese", "Asparagus", "Pork Chops", "Shrimp", "Lemon"] },
-                    { name: "Sauvignon Blanc", pairings: ["Goat Cheese", "Asparagus", "Herbs", "Fish", "Oysters", "Chicken", "Salad", "Smoked Salmon"] },
-                    { name: "Merlot", pairings: ["Beef", "Pork", "Pasta", "Burgers", "Mushroom", "Lamb", "Chocolate", "Chicken"] },
-                    { name: "Cabernet Sauvignon", pairings: ["Red Meat", "Beef", "Steak", "Lamb", "Hard Cheese", "Mushrooms", "Black Pepper", "Dark Chocolate"] }
-                ],
-                 "Vegetables 🥕": [
-                    { name: "Broccoli", pairings: ["Cheddar Cheese", "Garlic", "Lemon", "Almonds", "Bacon", "Soy Sauce", "Sesame Oil", "Mushrooms"] },
-                    { name: "Carrots", pairings: ["Ginger", "Cinnamon", "Honey", "Butter", "Dill", "Orange", "Cumin", "Raisins"] },
-                    { name: "Potatoes", pairings: ["Rosemary", "Garlic", "Cheddar", "Sour Cream", "Chives", "Bacon", "Onions", "Thyme"] },
-                    { name: "Tomatoes", pairings: ["Basil", "Mozzarella", "Garlic", "Olives", "Balsamic", "Cilantro", "Onions", "Feta"] },
-                    { name: "Spinach", pairings: ["Feta", "Garlic", "Nutmeg", "Ricotta", "Lemon", "Bacon", "Mushrooms", "Onions"] },
-                    { name: "Asparagus", pairings: ["Lemon", "Garlic", "Parmesan", "Balsamic", "Butter", "Prosciutto", "Eggs", "Mushrooms"] },
-                    { name: "Mushrooms", pairings: ["Garlic", "Thyme", "Rosemary", "Beef", "Onions", "Butter", "Soy Sauce", "Red Wine"] },
-                    { name: "Bell Peppers", pairings: ["Onions", "Sausage", "Garlic", "Tomatoes", "Beef", "Chicken", "Cumin", "Chili Powder"] }
-                ],
-                 "Desserts 🍰": [
-                    { name: "Chocolate Cake", pairings: ["Vanilla Ice Cream", "Raspberries", "Coffee", "Cherries", "Red Wine", "Strawberries", "Mint", "Whipped Cream"] },
-                    { name: "Apple Pie", pairings: ["Vanilla Ice Cream", "Cinnamon", "Caramel", "Cheddar Cheese", "Whipped Cream", "Nutmeg", "Pecans", "Ginger"] },
-                    { name: "Brownies", pairings: ["Walnuts", "Vanilla Ice Cream", "Caramel", "Hot Fudge", "Strawberries", "Raspberries", "Peppermint", "Marshmallows"] },
-                    { name: "Cheesecake", pairings: ["Berries", "Chocolate Sauce", "Caramel", "Whipped Cream", "Lemon Curd", "Cherry", "Strawberries", "Raspberries"] },
-                    { name: "Lemon Meringue Pie", pairings: ["Raspberries", "Whipped Cream", "Blueberries", "Blackberries", "Mint", "Pistachios", "Coconut", "Ginger"] },
-                    { name: "Tiramisu", pairings: ["Coffee", "Chocolate", "Mascarpone", "Rum", "Cocoa Powder", "Espresso", "Brandy", "Cinnamon"] },
-                    { name: "Creme Brulée", pairings: ["Berries", "Champagne", "Espresso", "Coffee", "Bourbon", "Grand Marnier", "Pistachios", "Almonds"] },
-                    { name: "Carrot Cake", pairings: ["Cream Cheese Frosting", "Walnuts", "Pecans", "Cinnamon", "Nutmeg", "Ginger", "Allspice", "Raisins"] }
-                ],
-                "Herbs & Spices 🌿": [
-                    { name: "Basil", pairings: ["Tomatoes", "Mozzarella", "Garlic", "Olive Oil", "Pesto", "Chicken", "Pasta", "Balsamic"] },
-                    { name: "Cinnamon", pairings: ["Apples", "Oatmeal", "Pumpkin", "Coffee", "Pears", "Carrots", "Bananas", "Pecans"] },
-                    { name: "Rosemary", pairings: ["Chicken", "Lamb", "Potatoes", "Garlic", "Bread", "Beef", "Mushrooms", "Pork"] },
-                    { name: "Garlic", pairings: ["Chicken", "Beef", "Pasta", "Bread", "Mushrooms", "Broccoli", "Potatoes", "Spinach"] },
-                    { name: "Mint", pairings: ["Lamb", "Chocolate", "Berries", "Tea", "Lemon", "Yogurt", "Cucumbers", "Watermelon"] },
-                    { name: "Cilantro", pairings: ["Tomatoes", "Avocado", "Lime", "Onions", "Black Beans", "Salsa", "Chicken", "Pork"] },
-                    { name: "Oregano", pairings: ["Tomatoes", "Pizza", "Pasta", "Chicken", "Lamb", "Garlic", "Olives", "Feta"] },
-                    { name: "Cumin", pairings: ["Chili", "Beef", "Lamb", "Chicken", "Carrots", "Lentils", "Black Beans", "Sweet Potatoes"] }
-                ],
-                "Drinks 🥤": [
-                    { name: "Coffee", pairings: ["Chocolate", "Donuts", "Croissants", "Milk", "Brownies", "Cinnamon", "Caramel", "Pastries"] },
-                    { name: "Tea", pairings: ["Scones", "Lemon", "Honey", "Mint", "Ginger", "Milk", "Biscuits", "Jam"] },
-                    { name: "Milk", pairings: ["Cookies", "Cereal", "Coffee", "Chocolate", "Bread", "Bananas", "Oatmeal", "Honey"] },
-                    { name: "Juice", pairings: ["Breakfast Foods", "Toast", "Smoothies", "Yogurt", "Pancakes", "Muffins", "Bacon", "Sausage"] },
-                    { name: "Hot Chocolate", pairings: ["Marshmallows", "Whipped Cream", "Cinnamon", "Peppermint", "Cookies", "Caramel", "Brownies", "Espresso"] },
-                    { name: "Smoothies", pairings: ["Berries", "Bananas", "Spinach", "Yogurt", "Oatmeal", "Protein Powder", "Almond Butter", "Honey"] },
-                    { name: "Soda", pairings: ["Pizza", "Burgers", "Fries", "Hot Dogs", "Popcorn", "Fried Chicken", "Sandwiches", "Nachos"] },
-                    { name: "Water", pairings: ["Everything"] }
-                ],
-                "Grains 🌾": [
-                    { name: "Rice", pairings: ["Soy Sauce", "Chicken", "Beef", "Vegetables", "Fish", "Curry", "Tofu", "Broccoli"] },
-                    { name: "Pasta", pairings: ["Tomato Sauce", "Pesto", "Parmesan", "Meatballs", "Garlic", "Basil", "Chicken", "Mushrooms"] },
-                    { name: "Oats", pairings: ["Berries", "Bananas", "Honey", "Cinnamon", "Nuts", "Yogurt", "Maple Syrup", "Dried Fruit"] },
-                    { name: "Bread", pairings: ["Butter", "Jam", "Cheese", "Salami", "Lettuce", "Tomato", "Mayonnaise", "Ham"] },
-                    { name: "Quinoa", pairings: ["Vegetables", "Chicken", "Avocado", "Black Beans", "Cilantro", "Lime", "Tomatoes", "Feta"] },
-                    { name: "Tortillas", pairings: ["Salsa", "Guacamole", "Sour Cream", "Chicken", "Beef", "Cheese", "Black Beans", "Cilantro"] },
-                    { name: "Couscous", pairings: ["Vegetables", "Chicken", "Lemon", "Mint", "Cilantro", "Chickpeas", "Lamb", "Feta"] },
-                    { name: "Cornmeal", pairings: ["Chili", "Maple Syrup", "Butter", "Honey", "Sausage", "Bacon", "Cheese", "Jalapenos"] }
-                ],
-                "Nuts & Seeds 🌰": [
-                    { name: "Almonds", pairings: ["Chocolate", "Berries", "Apples", "Honey", "Yogurt", "Dates", "Coffee", "Cheese"] },
-                    { name: "Walnuts", pairings: ["Pears", "Apples", "Blue Cheese", "Honey", "Maple Syrup", "Oatmeal", "Cinnamon", "Brownies"] },
-                    { name: "Pecans", pairings: ["Apples", "Pumpkin", "Maple Syrup", "Caramel", "Sweet Potatoes", "Chocolate", "Bourbon", "Bacon"] },
-                    { name: "Pistachios", pairings: ["Cherries", "Raspberries", "Vanilla Ice Cream", "Chocolate", "Honey", "Lemon", "Cranberries", "Cilantro"] },
-                    { name: "Cashews", pairings: ["Chicken", "Curry", "Rice", "Broccoli", "Ginger", "Garlic", "Bell Peppers", "Soy Sauce"] },
-                    { name: "Sesame Seeds", pairings: ["Soy Sauce", "Chicken", "Rice", "Ginger", "Garlic", "Broccoli", "Honey", "Noodles"] },
-                    { name: "Flax Seeds", pairings: ["Oatmeal", "Yogurt", "Smoothies", "Berries", "Bananas", "Honey", "Cinnamon", "Protein Powder"] },
-                    { name: "Chia Seeds", pairings: ["Almond Milk", "Berries", "Yogurt", "Honey", "Bananas", "Cocoa Powder", "Coconut Milk", "Cinnamon"] }
-                ],
-                "Healthy Habits 🌱": [
-                    { name: "Drinking Water", pairings: ["Hydrates your body and skin", "Supports healthy digestion", "Helps regulate body temperature", "Can boost energy levels"] },
-                    { name: "Daily Yogurt", pairings: ["Supports a healthy gut with probiotics", "Strengthens your immune system", "Contains calcium for bone health", "Helps make skin smooth"] },
-                    { name: "Eating Berries", pairings: ["Packed with antioxidants", "Rich in vitamin C and fiber", "Helps reduce inflammation", "Great for heart health"] },
-                    { name: "Healthy Fats", pairings: ["Found in avocado, nuts, and olive oil", "Essential for brain function", "Help absorb vitamins", "Keep you feeling full longer"] },
-                    { name: "Green Leafy Veggies", pairings: ["Excellent source of vitamins K, A, and C", "Rich in iron and antioxidants", "Good for eye health", "Helps support strong bones"] },
-                    { name: "Whole Grains", pairings: ["A great source of fiber", "Helps with sustained energy", "Good for heart health", "Supports digestive system"] },
-                    { name: "Lean Protein", pairings: ["Builds and repairs muscle tissue", "Helps keep you feeling full", "Supports healthy skin and hair", "Found in chicken, fish, and beans"] },
-                    { name: "Herbal Tea", pairings: ["Hydrates and can be soothing", "Can help with relaxation", "Many types offer unique benefits", "A great way to warm up"] }
-                ],
-                "Superfoods ✨": [
-                    { name: "Blueberries", pairings: ["Packed with antioxidants for brain health", "Supports heart health", "Rich in Vitamin C and K", "Helps reduce inflammation"] },
-                    { name: "Spinach", pairings: ["Full of iron for energy", "Rich in Vitamin A and K", "Good for eye health", "Helps strengthen bones"] },
-                    { name: "Avocado", pairings: ["Contains healthy fats for brain function", "Great source of fiber and potassium", "Helps lower bad cholesterol", "Promotes healthy skin"] },
-                    { name: "Chia Seeds", pairings: ["Excellent source of omega-3s", "High in fiber and protein", "Help you feel full", "Good for digestive health"] },
-                    { name: "Salmon", pairings: ["Rich in omega-3 fatty acids", "Great for heart and brain health", "High-quality protein source", "Contains Vitamin D"] }
-                ],
-                "Energy Boosts ⚡": [
-                    { name: "Oatmeal", pairings: ["Provides long-lasting energy", "High in fiber", "Helps stabilize blood sugar", "Good for heart health"] },
-                    { name: "Bananas", pairings: ["A natural source of quick energy", "Rich in potassium for muscle function", "Easy to digest", "Great for a pre-workout snack"] },
-                    { name: "Almonds", pairings: ["Packed with protein and healthy fats", "Sustains energy levels", "Good source of Vitamin E", "Helps with muscle repair"] },
-                    { name: "Sweet Potatoes", pairings: ["Provides complex carbs for steady energy", "Rich in fiber and Vitamin A", "Versatile and delicious", "Supports immune system"] }
-                ],
-                "Vitamins & Minerals 💊": [
-                    { name: "Oranges", pairings: ["Excellent source of Vitamin C", "Boosts immune system", "Good for skin health", "Helps with iron absorption"] },
-                    { name: "Milk", pairings: ["Rich in calcium for strong bones", "Contains Vitamin D", "Good for muscle recovery", "Provides essential protein"] },
-                    { name: "Carrots", pairings: ["Full of Vitamin A for good vision", "Good source of fiber", "Supports healthy skin", "A crunchy, healthy snack"] },
-                    { name: "Lentils", pairings: ["High in iron for energy", "Great source of protein", "Helps maintain healthy blood sugar", "Good for heart health"] }
-                ]
-            };
-            
-            const foodPhrases = [
-                "Wishing you a day filled with delicious discoveries.",
-                "Here's to a warm and wonderful meal.",
-                "Food tastes better when we share it. Enjoy!",
-                "May your plate be full of flavor and happiness.",
-                "Bringing a little warmth to your kitchen.",
-                "Savor the flavor, one bite at a time.",
-                "Your next favorite meal starts here.",
-                "Sending you a sprinkle of yum and a dash of happy.",
-                "Let's find something delicious to brighten your day."
-            ];
-
-            const splashScreen = document.getElementById('splash-screen');
-            const mainContent = document.getElementById('main-content');
-            const foodPhraseElement = document.getElementById('food-phrase');
-            const categoryView = document.getElementById('category-view');
-            const categoryList = document.getElementById('category-list');
-            const pairingsView = document.getElementById('pairings-view');
-            const backButton = document.getElementById('back-button');
-            const currentCategoryTitle = document.getElementById('current-category');
-            const pairingsList = document.getElementById('pairings-list');
-
-            // --- Step 1: Show Splash Screen with Name and ID ---
-            setTimeout(() => {
-                splashScreen.classList.add('opacity-0');
-                setTimeout(() => {
-                    splashScreen.classList.add('hidden');
-                    mainContent.classList.remove('hidden');
-                    // Show a random phrase once the main content is visible
-                    displayRandomPhrase();
-                }, 1000); 
-            }, 3000); 
-
-            // --- Step 2: Generate Category Cards with Emojis ---
-            function renderCategories() {
-                categoryList.innerHTML = '';
-                Object.keys(foodData).forEach(category => {
-                    const card = document.createElement('div');
-                    card.classList.add('bg-lime-50', 'rounded-xl', 'p-4', 'shadow-sm', 'hover:bg-lime-100', 'transition-colors', 'cursor-pointer', 'text-center', 'font-semibold', 'text-lg', 'text-lime-800');
-                    card.textContent = category;
-                    card.dataset.category = category;
-                    categoryList.appendChild(card);
-                });
-            }
-
-            // --- Step 3: Handle Category Clicks to Show Pairings ---
-            categoryList.addEventListener('click', (event) => {
-                const categoryCard = event.target.closest('div');
-                if (categoryCard && categoryCard.dataset.category) {
-                    const categoryName = categoryCard.dataset.category;
-                    renderPairings(categoryName);
-                }
-            });
-
-            function renderPairings(categoryName) {
-                currentCategoryTitle.textContent = categoryName;
-                pairingsList.innerHTML = '';
-
-                foodData[categoryName].forEach(item => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('bg-gray-50', 'rounded-xl', 'p-4', 'shadow-sm');
-
-                    const title = document.createElement('h3');
-                    title.classList.add('font-bold', 'text-gray-900', 'text-xl', 'mb-2');
-                    title.textContent = item.name;
-
-                    const pairingsText = document.createElement('p');
-                    pairingsText.classList.add('text-gray-600');
-                    // The description for "Healthy Habits" and new categories is different
-                    if (["Healthy Habits 🌱", "Superfoods ✨", "Energy Boosts ⚡", "Vitamins & Minerals 💊"].includes(categoryName)) {
-                        pairingsText.textContent = item.pairings.join(', ');
-                    } else {
-                        pairingsText.textContent = `Pairs with: ${item.pairings.join(', ')}.`;
-                    }
-
-                    listItem.appendChild(title);
-                    listItem.appendChild(pairingsText);
-                    pairingsList.appendChild(listItem);
-                });
-
-                categoryView.classList.add('hidden');
-                pairingsView.classList.remove('hidden');
-            }
-
-            // --- Step 4: Handle Back Button Click ---
-            backButton.addEventListener('click', () => {
-                pairingsView.classList.add('hidden');
-                categoryView.classList.remove('hidden');
-                displayRandomPhrase(); // Show a new phrase when returning to the category view
-            });
-            
-            // --- Step 5: Display a random food phrase ---
-            function displayRandomPhrase() {
-                const randomIndex = Math.floor(Math.random() * foodPhrases.length);
-                foodPhraseElement.textContent = foodPhrases[randomIndex];
-            }
-
-            // Initial render
-            renderCategories();
-        });
-    </script>
 
 </body>
 </html>
